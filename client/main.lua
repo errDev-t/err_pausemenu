@@ -1,6 +1,7 @@
 local config = require 'shared.config'
 local cam = nil
 local open = false
+local closing = false
 
 AddEventHandler('onResourceStart', function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
@@ -47,11 +48,7 @@ function isCameraFacingForward()
         headingDifference = 360 - headingDifference
     end
 
-    if headingDifference <= 90 then
-        return true
-    else
-        return false
-    end
+    return headingDifference <= 90
 end
 
 -- Function to check if the inventory is open
@@ -64,7 +61,11 @@ end
 function openCam()
     local vehicle = GetVehiclePedIsIn(cache.ped, false)
 
-    if IsPedInAnyVehicle(cache.ped) or IsThisModelABicycle(vehicle) then return end
+    if IsPedInAnyVehicle(cache.ped, false) then
+        if vehicle ~= 0 and not IsThisModelABicycle(GetEntityModel(vehicle)) then
+            return
+        end
+    end
 
     -- Freeze player and apply effects
     FreezeEntityPosition(cache.ped, true)
@@ -72,9 +73,8 @@ function openCam()
     SetTransitionTimecycleModifier('NG_filmic11', 0.2)
     SetTimecycleModifierStrength(0.56)
 
-    -- Determine camera position
-    local isFacingForward = not isCameraFacingForward()
-    local offsetY = isFacingForward and 1.6 or -1.6
+    local isCameraBehindPlayer = not isCameraFacingForward()
+    local offsetY = isCameraBehindPlayer and 1.6 or -1.6
     local coords = GetOffsetFromEntityInWorldCoords(cache.ped, 0, offsetY, 0.55)
 
     -- Create camera
@@ -82,13 +82,13 @@ function openCam()
     SetCamCoord(cam, coords.x, coords.y, coords.z)
 
     -- Set rotation and point at ped's head bone
-    local rotationZ = isFacingForward
+    local rotationZ = isCameraBehindPlayer
         and GetEntityHeading(cache.ped)
         or (GetEntityHeading(cache.ped) + 180) % 360
 
     SetCamRot(cam, 0.0, 0.0, rotationZ)
 
-    if isFacingForward then
+    if isCameraBehindPlayer then
         PointCamAtPedBone(cam, cache.ped, 31086, 0.5, -2.0, -0.03, true)
     else
         PointCamAtPedBone(cam, cache.ped, 31086, -0.5, 2.0, 0.03, true)
@@ -113,11 +113,10 @@ CreateThread(function()
 
             FadeUpPedLight(1)
             UpdateLightsOnEntity(ped)
+            TaskLookAtCoord(ped, light.x, light.y, light.z, 4000, 1, 1)
         end
     end
 end)
-
-local closing = false
 
 function closePM()
     if closing then return end
@@ -126,7 +125,13 @@ function closePM()
     SetPedCanPlayAmbientAnims(cache.ped, true)
     SetNuiFocus(false, false)
     open = false
-    closeCam()
+
+    if DoesCamExist(cam) then
+        closeCam()
+    else
+        FreezeEntityPosition(cache.ped, false)
+    end
+
     Wait(300)
     closing = false
 end
