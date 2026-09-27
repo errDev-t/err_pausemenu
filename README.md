@@ -5,15 +5,6 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/errDev-t/err_pausemenu/releases">
-    <img
-      src="https://img.shields.io/github/downloads/errDev-t/err_pausemenu/total?style=flat-square&label=downloads"
-      alt="Downloads"
-    >
-  </a>
-</p>
-
-<p align="center">
   <a href="https://youtu.be/URGywYaIQRQ">Preview</a>
   &nbsp;·&nbsp;
   <a href="https://docs.err-scripts.xyz/pausemenu">Documentation</a>
