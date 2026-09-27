@@ -5,8 +5,11 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/errDev-t/err_pausemenu">
-    <img src="https://img.shields.io/github/downloads/errDev-t/err_pausemenu/total?style=flat-square&label=downloads" alt="Downloads">
+  <a href="https://github.com/errDev-t/err_pausemenu/releases">
+    <img
+      src="https://img.shields.io/github/downloads/errDev-t/err_pausemenu/total?style=flat-square&label=downloads"
+      alt="Downloads"
+    >
   </a>
 </p>
 
