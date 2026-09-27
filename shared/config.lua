@@ -1,4 +1,4 @@
-return {
+Config = {
     -- Keybind for opening the radial menu
     keyBind = 'ESCAPE',
 

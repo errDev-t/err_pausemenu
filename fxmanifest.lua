@@ -5,7 +5,7 @@ repository 'a Pausemenu made by ERR dev team with love <3'
 version '1.0.0'
 
 shared_script {
-	'@ox_lib/init.lua',
+	'shared/*.lua',
 }
 
 client_script {
@@ -21,10 +21,6 @@ ui_page "web/build/index.html"
 files {
 	'web/build/index.html',
 	'web/build/**/*',
-	'shared/*.lua',
-}
-
-escrow_ignore {
 	'shared/*.lua',
 }
 

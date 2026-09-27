@@ -1,4 +1,4 @@
-local config = require 'shared.config'
+local config = Config
 local cam = nil
 local open = false
 local closing = false
@@ -16,7 +16,7 @@ AddEventHandler('onResourceStart', function(resourceName)
 end)
 
 AddEventHandler("onResourceStop", function(resource)
-    if cache.resource == resource and DoesCamExist(cam) then
+    if DoesCamExist(cam) then
         closeCam()
     end
 end)
@@ -59,23 +59,22 @@ function isInventoryOpen()
 end
 
 function openCam()
-    local vehicle = GetVehiclePedIsIn(cache.ped, false)
+    if GetEntitySpeed(PlayerPedId()) > 0.01 then return end
 
-    if IsPedInAnyVehicle(cache.ped, false) then
+    local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+
+    if IsPedInAnyVehicle(PlayerPedId(), false) then
         if vehicle ~= 0 and not IsThisModelABicycle(GetEntityModel(vehicle)) then
             return
         end
     end
-
-    -- Freeze player and apply effects
-    FreezeEntityPosition(cache.ped, true)
 
     SetTransitionTimecycleModifier('NG_filmic11', 0.2)
     SetTimecycleModifierStrength(0.56)
 
     local isCameraBehindPlayer = not isCameraFacingForward()
     local offsetY = isCameraBehindPlayer and 1.6 or -1.6
-    local coords = GetOffsetFromEntityInWorldCoords(cache.ped, 0, offsetY, 0.55)
+    local coords = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0, offsetY, 0.55)
 
     -- Create camera
     cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
@@ -83,22 +82,22 @@ function openCam()
 
     -- Set rotation and point at ped's head bone
     local rotationZ = isCameraBehindPlayer
-        and GetEntityHeading(cache.ped)
-        or (GetEntityHeading(cache.ped) + 180) % 360
+        and GetEntityHeading(PlayerPedId())
+        or (GetEntityHeading(PlayerPedId()) + 180) % 360
 
     SetCamRot(cam, 0.0, 0.0, rotationZ)
 
     if isCameraBehindPlayer then
-        PointCamAtPedBone(cam, cache.ped, 31086, 0.5, -2.0, -0.03, true)
+        PointCamAtPedBone(cam, PlayerPedId(), 31086, 0.5, -2.0, -0.03, true)
     else
-        PointCamAtPedBone(cam, cache.ped, 31086, -0.5, 2.0, 0.03, true)
+        PointCamAtPedBone(cam, PlayerPedId(), 31086, -0.5, 2.0, 0.03, true)
     end
 
     SetCamActive(cam, true)
     RenderScriptCams(true, true, 350, 1, 0)
     SetCamFov(cam, 38.0)
 
-    TaskLookAtCoord(cache.ped, coords.x, coords.y, coords.z, 5000, 1, 1)
+    TaskLookAtCoord(PlayerPedId(), coords.x, coords.y, coords.z, 5000, 1, 1)
 end
 
 CreateThread(function()
@@ -106,7 +105,7 @@ CreateThread(function()
         Wait(0)
 
         if DoesCamExist(cam) then
-            local ped = cache.ped
+            local ped = PlayerPedId()
 
             local light = GetOffsetFromEntityInWorldCoords(ped, 0.9, 0.4, 0.9)
             DrawLightWithRange(light.x, light.y, light.z, 255, 248, 235, 1.8, 2.9)
@@ -121,15 +120,13 @@ end)
 function closePM()
     if closing then return end
     closing = true
-    ClearPedTasks(cache.ped)
-    SetPedCanPlayAmbientAnims(cache.ped, true)
+    ClearPedTasks(PlayerPedId())
+    SetPedCanPlayAmbientAnims(PlayerPedId(), true)
     SetNuiFocus(false, false)
     open = false
 
     if DoesCamExist(cam) then
         closeCam()
-    else
-        FreezeEntityPosition(cache.ped, false)
     end
 
     Wait(300)
@@ -141,7 +138,6 @@ function closeCam()
     RenderScriptCams(false, true, 410, true, false)
     SetCamActive(cam, false)
     DestroyCam(cam, true)
-    FreezeEntityPosition(cache.ped, false)
 
     cam = nil
 end
@@ -149,7 +145,7 @@ end
 function showPauseMenu()
     SendReactMessage("showPause")
     SetNuiFocus(true, true)
-    SetPedCanPlayAmbientAnims(cache.ped, false)
+    SetPedCanPlayAmbientAnims(PlayerPedId(), false)
     if config.camera then openCam() end
     open = true
 end
@@ -195,25 +191,21 @@ AddEventHandler('err_pausemenu:openRadar', function()
     ActivateFrontendMenu('FE_MENU_VERSION_MP_PAUSE', false, -1)
 end)
 
-lib.addKeybind({
-    name = 'pausemenu',
-    description = 'Open Pause Menu',
-    defaultKey = config.keyBind,
-    allowInPauseMenu = false,
-    onPressed = function()
-        DisableControlAction(1, 200, true) -- maybe it is the cause of the crash if there is a crash just a note for me
+RegisterCommand('+pausemenu', function()
+    DisableControlAction(1, 200, true) -- maybe it is the cause of the crash if there is a crash just a note for me
 
-        if open or closing then
-            return
-        end
-
-        if isInventoryOpen() or IsPauseMenuActive() then
-            return
-        end
-
-        showPauseMenu()
+    if open or closing then
+        return
     end
-})
+
+    if isInventoryOpen() or IsPauseMenuActive() then
+        return
+    end
+
+    showPauseMenu()
+end)
+
+RegisterKeyMapping('+pausemenu', 'Open pause menu', 'keyboard', config.keyBind)
 
 exports('getPauseMenuState', function()
     return open

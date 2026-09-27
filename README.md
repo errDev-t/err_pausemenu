@@ -8,9 +8,6 @@
   <a href="https://github.com/errDev-t/err_pausemenu">
     <img src="https://img.shields.io/github/downloads/errDev-t/err_pausemenu/total?style=flat-square&label=downloads" alt="Downloads">
   </a>
-  <a href="https://github.com/overextended/ox_lib">
-    <img src="https://img.shields.io/badge/dependency-ox__lib-2b2b2b?style=flat-square" alt="ox_lib">
-  </a>
 </p>
 
 <p align="center">
@@ -87,7 +84,6 @@ Most of the experience lives in the configuration.
 | :--------------- | :--------------- |
 | **Framework**    | Standalone       |
 | **Server**       | Any FiveM server |
-| **Dependency**   | `ox_lib`         |
 | **Installation** | Drag & drop      |
 
 ## Documentation
