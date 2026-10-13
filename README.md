@@ -1,13 +1,7 @@
 <h1 align="center">err_pausemenu</h1>
 
 <p align="center">
-  An open-source, fully customizable pause menu for FiveM.
-</p>
-
-<p align="center">
-  <a href="https://github.com/errDev-t/err_pausemenu">
-    <img src="https://img.shields.io/github/downloads/errDev-t/err_pausemenu/total?style=flat-square&label=downloads" alt="Downloads">
-  </a>
+  A fully customizable pause menu for FiveM.
 </p>
 
 <p align="center">
@@ -102,10 +96,20 @@ Questions, issues, assistance, and updates:
 
 Issues, pull requests, and improvements are welcome.
 
+## License
+
+ERR Pausemenu is **source-available** under the **ERR No-Resale License 1.0**.
+
+You are free to use and modify the resource, including on commercial FiveM servers.
+
+You may **not sell, resell, commercially redistribute, or sell modified versions** of the resource without explicit permission from ERR.
+
+See [`LICENSE`](./LICENSE) for the complete license terms.
+
 <br>
 
 <p align="center">
   <sub>
-    ERR Pausemenu · Open Source · FiveM
+    ERR Pausemenu · Source Available · FiveM
   </sub>
 </p>
