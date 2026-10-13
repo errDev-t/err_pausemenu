@@ -103,7 +103,6 @@ function MenuPanel({ menu, visible, onAction }: { menu: MenuItem[][]; visible: b
         aria-label="Pause menu"
         className={cn(
           "font-armio flex h-full w-full flex-col items-start justify-center gap-5 p-20 tracking-[-1.25px] text-ink [text-shadow:0_2px_14px_rgba(0,0,0,0.55)] [transform-origin:left_center] [transform:perspective(900px)_rotateY(3deg)]",
-          // dim every other button while one is hovered / keyboard-focused
           "[&:has(button:hover)_button:not(:hover)]:opacity-75 [&:has(button:focus-visible)_button:not(:focus-visible)]:opacity-75",
         )}
       >
@@ -136,7 +135,7 @@ function MenuPanel({ menu, visible, onAction }: { menu: MenuItem[][]; visible: b
   );
 }
 
-/* ---------------- Patch card ---------------- */
+/* ---------------- beachhhhhhhhhhhhh card hhhh sorry ---------------- */
 
 interface PatchCardProps {
   latest: PatchNote;
@@ -165,7 +164,6 @@ function PatchCard({ latest, patchesOpen, setPatchesOpen }: PatchCardProps) {
   return (
     <div className="flex h-full w-1/2 items-center justify-end">
       <div className="pointer-events-none relative flex h-full w-fit items-center justify-end">
-        {/* invisible hit zone so the peeking card is easy to hover */}
         <div aria-hidden {...hoverProps} className="pointer-events-auto absolute right-0 top-1/4 h-1/2 w-36" />
 
         <div
@@ -193,7 +191,6 @@ function PatchCard({ latest, patchesOpen, setPatchesOpen }: PatchCardProps) {
             onBlurCapture={() => setFocus(false)}
             className="pointer-events-auto relative h-1/2 w-96 overflow-hidden rounded-md border border-[rgba(44,44,44,0.54)] bg-[#0a0a0a] shadow-[0_20px_50px_rgba(0,0,0,0.6),0_1px_0_rgba(255,255,255,0.04)_inset]"
           >
-            {/* wallpaper */}
             <div className={cn("absolute inset-0 transition-transform duration-700", EASE, open ? "scale-105" : "translate-x-6 scale-[1.16]")}>
               <div className="perspectiveImg" style={{ backgroundImage: `url("${latest.backgroundImage}")` }} />
             </div>
@@ -201,7 +198,6 @@ function PatchCard({ latest, patchesOpen, setPatchesOpen }: PatchCardProps) {
             <div className="vignette" />
             <div aria-hidden className={cn("pointer-events-none absolute inset-0 z-[4] rounded-md border border-white/15 transition-opacity duration-500", open ? "opacity-100" : "opacity-0")} />
 
-            {/* summary */}
             <div className={cn("absolute inset-0 z-[3] transition-opacity duration-300", patchesOpen && "opacity-0")}>
               <div className={cn("absolute inset-0 transition-[transform,opacity] duration-500 delay-75", EASE, open ? "translate-x-0 opacity-100" : "translate-x-9 opacity-0")}>
                 <div className="absolute left-0 right-0 top-0 flex items-center justify-between px-5 pt-4">
@@ -252,7 +248,6 @@ function PatchCard({ latest, patchesOpen, setPatchesOpen }: PatchCardProps) {
               </div>
             </div>
 
-            {/* changelog drawer (always mounted, just slides) */}
             <div
               id="drawer"
               aria-hidden={!patchesOpen}
@@ -311,7 +306,7 @@ function PatchCard({ latest, patchesOpen, setPatchesOpen }: PatchCardProps) {
   );
 }
 
-/* ---------------- App ---------------- */
+/* ---------------- Ahhhhhhhhhhhhh App ---------------- */
 
 const App: React.FC = () => {
   const [visible, setVisible] = useState(false);
